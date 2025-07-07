@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  backend:
+   build:
+    context: backend
+    dockerfile: Dockerfile.backend
+   container_name: backend
+   ports:
+    - "8093:8093"
+   networks: 
+    - rest_api
+   depends_on:
+    - postgres_db
+   
+  postgres_db:
+   ports:
+     - "5432:5432"
+   container_name: postgres
+   image: postgres:15
+   restart: always
+   volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+   environment:
+      - POSTGRES_PASSWORD=bankingTest
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=db_banking
+   networks:
+     - rest_api
+   
+  
+networks:
+  banking:
+    name: banking
+  rest_api:
+    name: rest_api
