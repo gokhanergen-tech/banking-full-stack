@@ -1,11 +1,13 @@
 package com.banking.banking.exceptions;
 
+import com.banking.banking.exceptions.custom.AccountAlreadyExistException;
 import com.banking.banking.exceptions.custom.UserAlreadyExistException;
 import com.banking.banking.response.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -59,9 +61,20 @@ public class ValidationExceptionHandler {
     @ExceptionHandler(value = {UsernameNotFoundException.class})
     public ResponseEntity<ErrorResponse<Void>> userNotFoundException(Exception userNotFoundException) {
         ErrorResponse<Void> response = new ErrorResponse<>(
-                ErrorCode.AUTHENTICATION_FAILED.getCode(),
+                ErrorCode.WRONG_USER_NAME_OR_PASSWORD.getCode(),
                 null,
                 "Invalid username or password",
+                HttpStatus.UNAUTHORIZED.value()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(value = {AuthenticationException.class})
+    public ResponseEntity<ErrorResponse<Void>> authenticationException(AuthenticationException userNotFoundException) {
+        ErrorResponse<Void> response = new ErrorResponse<>(
+                ErrorCode.AUTHENTICATION_FAILED.getCode(),
+                null,
+                "You are not login.",
                 HttpStatus.UNAUTHORIZED.value()
         );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -75,6 +88,20 @@ public class ValidationExceptionHandler {
                 ErrorCode.USER_ALREADY_EXISTS.getCode(),
                 null,
                 "Username already exists. Please choose a different username.",
+                HttpStatus.CONFLICT.value()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(response);
+    }
+
+    @ExceptionHandler(value = AccountAlreadyExistException.class)
+    public ResponseEntity<ErrorResponse<Void>> handleValidationServerExceptions(
+            AccountAlreadyExistException ex) {
+
+        ErrorResponse<Void> response = new ErrorResponse<>(
+                ErrorCode.ACCOUNT_ALREADY_EXISTS.name(),
+                null,
+                ex.getMessage(),
                 HttpStatus.CONFLICT.value()
         );
         return ResponseEntity.status(HttpStatus.CONFLICT)

@@ -3,6 +3,7 @@ package com.banking.banking.controller;
 import com.banking.banking.dto.AccountDto;
 import com.banking.banking.request.AccountRequest;
 import com.banking.banking.response.SuccessResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.Map;
 
 public interface AccountControllerApi {
 
-    @PostMapping("/api/accounts")
-    ResponseEntity<SuccessResponse<AccountDto>> createAccount(@RequestBody AccountRequest accountRequest);
+    @PostMapping
+    ResponseEntity<SuccessResponse<AccountDto>> createAccount(@Valid @RequestBody AccountRequest accountRequest);
 
     /*@PostMapping(value = "/api/accounts")
     ResponseEntity<List<AccountResponse>> searchAccounts(@RequestBody AccountSearchRequest searchRequest);

@@ -26,7 +26,7 @@ public class Account {
     private UUID id;
     @Column(nullable = false, unique = true)
     private String number;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
@@ -35,6 +35,9 @@ public class Account {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, columnDefinition = "foreign key(user_id) references users(id) on delete cascade")
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_account_user", value = ConstraintMode.CONSTRAINT))
     private User user;
 }
