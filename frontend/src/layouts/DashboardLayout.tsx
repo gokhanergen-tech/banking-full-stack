@@ -61,13 +61,16 @@ const DashboardLayout: React.FC = () => {
         <Header className={styles.header}>
           <div className={styles.headerRight}>
             <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={logout}>
-                    Çıkış Yap
-                  </Menu.Item>
-                </Menu>
-              }
+              menu={{
+                items: [
+                  {
+                    key: "logout",
+                    icon: <LogoutOutlined />,
+                    label: "Çıkış Yap",
+                    onClick: logout
+                  }
+                ]
+              }}
               trigger={["click"]}
             >
               <span style={{ color: "white", cursor: "pointer" }}>
