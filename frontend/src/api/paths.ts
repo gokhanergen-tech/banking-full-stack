@@ -5,6 +5,7 @@ const API_PATHS = {
   ACCOUNTS: "/accounts",
   ME: "/users/me",
   TRANSFER: "/transactions/transfer",
+  TRANSACTIONS_BY_ACCOUNT_ID: (id: string) => `/transactions/account/${id}`,
   DELETE_ACCOUNT_BY_ID: (id: string) => `/accounts/${id}`,
   ACCOUNT_BY_ID: (id: string) => `/accounts/${id}`
 };

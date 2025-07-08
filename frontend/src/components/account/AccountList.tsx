@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import accountService from "../../api/AccountService";
 import type { AccountDto } from "../../api/models/account";
 import { MessageContext } from "../../App";
+import TransactionsModal from "../modal/TransactionsModal";
 
 const AccountList = ({
   accounts,
@@ -15,6 +16,14 @@ const AccountList = ({
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState({ name: "", number: "" });
   const messageApi = useContext(MessageContext);
+
+  const [transactionsVisible, setTransactionsModalVisible] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<AccountDto | null>(null);
+
+  const showTransactions = async (account: AccountDto) => {
+    setSelectedAccount(account);
+    setTransactionsModalVisible(true);
+  };
 
   const fetchAccounts = async () => {
     setLoading(true);
@@ -82,7 +91,9 @@ const AccountList = ({
       key: "actions",
       render: (_: any, record: AccountDto) => (
         <Space>
-          <Button type="link">İşlemler</Button>
+          <Button type="link" onClick={() => showTransactions(record)}>
+            İşlemler
+          </Button>
           <Button type="link">Güncelle</Button>
           <Button danger type="link" onClick={() => onDelete(record.id)}>
             Sil
@@ -94,6 +105,13 @@ const AccountList = ({
 
   return (
     <div>
+      <TransactionsModal
+        modalVisible={transactionsVisible}
+        selectedAccount={selectedAccount}
+        onCancel={() => {
+          setTransactionsModalVisible(false);
+        }}
+      />
       <Space style={{ marginBottom: 16 }}>
         <Input
           placeholder="İsimle ara"
