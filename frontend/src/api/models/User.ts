@@ -4,7 +4,7 @@ export interface RegisterRequest {
   email: string;
 }
 
-export interface RegisterResponse {
+export interface LoginResponse {
   user: {
     username: string;
   };

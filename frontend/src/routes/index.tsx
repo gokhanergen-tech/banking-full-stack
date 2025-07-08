@@ -1,20 +1,32 @@
 import { Navigate, type RouteObject } from "react-router-dom";
+import ProtectedRoute from "../components/auth/ProtectedRoutes";
+import PublicRoute from "../components/auth/PublicRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import Accounts from "../pages/dashboard/Accounts/Accounts";
 
 export const routes: RouteObject[] = [
-  { path: "/login", element: <LoginPage /> },
-  { path: "/register", element: <RegisterPage /> },
-  { path: "*", element: <LoginPage /> },
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
+    element: <PublicRoute />,
     children: [
-      { element: <Navigate to="accounts" />, index: true },
-      { path: "accounts", element: <Accounts />, index: true },
-      { path: "profile", element: <>Profile</> }
+      { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> }
     ]
-  }
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+          { element: <Navigate to="accounts" />, index: true },
+          { path: "accounts", element: <Accounts /> },
+          { path: "profile", element: <>Profile</> }
+        ]
+      }
+    ]
+  },
+  { path: "*", element: <Navigate to="/login" /> }
 ];

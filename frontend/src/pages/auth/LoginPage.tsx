@@ -3,7 +3,7 @@ import { Button, Form, Input, Typography } from "antd";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userService from "../../api/UserService";
-import { MessageContext } from "../../App";
+import { AuthContext, MessageContext } from "../../App";
 
 const { Title } = Typography;
 
@@ -11,6 +11,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [isFetching, setFetching] = useState(false);
   const messageApi = useContext(MessageContext);
+  const auth = useContext(AuthContext);
 
   const onFinish = async (values: any) => {
     try {
@@ -27,13 +28,13 @@ const LoginPage = () => {
         key: "loading_login"
       });
 
-      await userService.login(loginRequest);
+      const userInfo = await userService.login(loginRequest);
       messageApi?.open({
         type: "success",
         content: "Giriş başarılı!"
       });
 
-      navigate("/dashboard");
+      auth?.updateAuthInfo(userInfo.user);
     } catch (err) {
       messageApi?.open({
         type: "error",

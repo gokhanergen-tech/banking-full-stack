@@ -23,8 +23,6 @@ public class TransactionService {
         Account targetAccount = accountRepository.findByNumber(transactionRequest.getTo())
                 .orElseThrow(() -> new AccountNotFoundException("Target account not found"));
 
-        if(sourceAccount==null)
-
         if (sourceAccount.getBalance().compareTo(transactionRequest.getAmount()) < 0) {
             throw new InsufficientBalanceException("Insufficient balance");
         }

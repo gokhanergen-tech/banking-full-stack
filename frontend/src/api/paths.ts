@@ -3,6 +3,9 @@ const API_PATHS = {
   LOGIN: "/users/login",
   USERS_ME: "/users/me",
   ACCOUNTS: "/accounts",
+  ME: "/users/me",
+  TRANSFER: "/transactions/transfer",
+  DELETE_ACCOUNT_BY_ID: (id: string) => `/accounts/${id}`,
   ACCOUNT_BY_ID: (id: string) => `/accounts/${id}`
 };
 

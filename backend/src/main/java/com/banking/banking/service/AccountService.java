@@ -42,6 +42,7 @@ public class AccountService {
         Account account = new Account();
 
         account.setName(accountName);
+        account.setBalance(accountRequest.getBalance());
         account.setNumber(UUID.randomUUID().toString());
         account.setUser(authenticatedUser);
 
