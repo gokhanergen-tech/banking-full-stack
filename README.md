@@ -35,5 +35,5 @@ npm run dev
 İsteğe bağlı olarak PostgreSQL veritabanını Docker ile başlatabilirsiniz:
 
 ```bash
-docker-compose -f docker-compose.dev.yml up postgres_db
+docker-compose -f docker-compose.dev.yml up -d postgres_db
 ```
