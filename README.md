@@ -19,15 +19,16 @@ Bu proje, temel bankacılık işlemlerini (hesap yönetimi, para transferi, işl
 - Context API
 - Ant Design
 - Axios
-- SCSS (Tema desteği: Light / Dark)
+- SCSS
 
 ---
 
 ### Frontend Kurulum ve Çalıştırma
 
-````bash
+```bash
 npm install
 npm run dev
+```
 
 ## 🐳 Docker ile Veritabanı Başlatma
 
@@ -35,4 +36,4 @@ npm run dev
 
 ```bash
 docker-compose -f docker-compose.dev.yml up postgres_db
-````
+```
