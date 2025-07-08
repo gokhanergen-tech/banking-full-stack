@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import accountService from "../../api/AccountService";
 import type { AccountDto } from "../../api/models/account";
 import { MessageContext } from "../../App";
+import AccountEditModal from "../modal/AccountEditModal";
 import TransactionsModal from "../modal/TransactionsModal";
 
 const AccountList = ({
@@ -18,11 +19,17 @@ const AccountList = ({
   const messageApi = useContext(MessageContext);
 
   const [transactionsVisible, setTransactionsModalVisible] = useState(false);
+  const [editAccountModalVisible, setEditAccountModalVisible] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<AccountDto | null>(null);
 
   const showTransactions = async (account: AccountDto) => {
     setSelectedAccount(account);
     setTransactionsModalVisible(true);
+  };
+
+  const openEditAccountModal = async (account: AccountDto) => {
+    setSelectedAccount(account);
+    setEditAccountModalVisible(true);
   };
 
   const fetchAccounts = async () => {
@@ -38,6 +45,16 @@ const AccountList = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAccountEdit = (accountUpdated: AccountDto) => {
+    setEditAccountModalVisible(false);
+    updateAccounts(
+      accounts.map((account) => {
+        if (account.id === accountUpdated.id) return accountUpdated;
+        return account;
+      })
+    );
   };
 
   useEffect(() => {
@@ -94,7 +111,9 @@ const AccountList = ({
           <Button type="link" onClick={() => showTransactions(record)}>
             İşlemler
           </Button>
-          <Button type="link">Güncelle</Button>
+          <Button onClick={() => openEditAccountModal(record)} type="link">
+            Güncelle
+          </Button>
           <Button danger type="link" onClick={() => onDelete(record.id)}>
             Sil
           </Button>
@@ -105,13 +124,26 @@ const AccountList = ({
 
   return (
     <div>
-      <TransactionsModal
-        modalVisible={transactionsVisible}
-        selectedAccount={selectedAccount}
-        onCancel={() => {
-          setTransactionsModalVisible(false);
-        }}
-      />
+      {transactionsVisible && (
+        <TransactionsModal
+          modalVisible={transactionsVisible}
+          selectedAccount={selectedAccount}
+          onCancel={() => {
+            setTransactionsModalVisible(false);
+          }}
+        />
+      )}
+      {editAccountModalVisible && (
+        <AccountEditModal
+          onCancel={() => {
+            setEditAccountModalVisible(false);
+          }}
+          onSave={handleAccountEdit}
+          account={selectedAccount}
+          visible={editAccountModalVisible}
+        />
+      )}
+
       <Space style={{ marginBottom: 16 }}>
         <Input
           placeholder="İsimle ara"

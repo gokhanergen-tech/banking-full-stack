@@ -6,11 +6,14 @@ import com.banking.banking.model.User;
 import com.banking.banking.request.LoginRequest;
 import com.banking.banking.response.LoginResponse;
 import com.banking.banking.utils.SecurityUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,7 +38,7 @@ public class AuthenticationService {
         this.userMapper = userMapper;
     }
 
-    public LoginResponse login(LoginRequest loginRequest, HttpServletResponse httpServletResponse){
+    public LoginResponse login(LoginRequest loginRequest, HttpServletResponse httpServletResponse) {
         User user = ((User) userDetailsService.loadUserByUsername(loginRequest.getUsername()));
 
         String salt = user.getSalt();
@@ -52,7 +55,7 @@ public class AuthenticationService {
         loginResponse.setUserDto(userDto);
 
         return loginResponse;
-    };
+    }
 
     public LoginResponse me() {
         User user = SecurityUtil.getCurrentUserAs(User.class);
@@ -60,5 +63,15 @@ public class AuthenticationService {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUserDto(userDto);
         return loginResponse;
+    }
+
+    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        SecurityContextHolder.clearContext();
+        HttpSession httpSession = httpServletRequest.getSession();
+        if (httpSession != null)
+            httpSession.invalidate();
+        if (httpServletRequest.getCookies() != null) {
+            cookieService.addCookie(httpServletResponse, "accessToken", "", 0, true);
+        }
     }
 }

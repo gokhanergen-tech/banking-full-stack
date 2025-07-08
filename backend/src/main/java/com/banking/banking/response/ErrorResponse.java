@@ -10,7 +10,7 @@ public class ErrorResponse<T> extends ApiResponse {
     private T details;
 
     public ErrorResponse(String errorCode, T details, String message, int status) {
-        super(status,message);
+        super(status, message);
         this.errorCode = errorCode;
         this.details = details;
     }

@@ -18,6 +18,10 @@ export class UserService {
     const success = response.data;
     return success.data;
   }
+
+  async logout(): Promise<void> {
+    await axiosInstance.get(API_PATHS.LOGOUT);
+  }
 }
 
 const userService = new UserService();

@@ -1,8 +1,6 @@
 package com.banking.banking.controller;
 
-import com.banking.banking.dto.AccountDto;
 import com.banking.banking.dto.TransactionDto;
-import com.banking.banking.request.AccountCreateRequest;
 import com.banking.banking.request.TransactionRequest;
 import com.banking.banking.response.SuccessResponse;
 import jakarta.validation.Valid;
@@ -18,6 +16,7 @@ import java.util.List;
 public interface TransactionControllerApi {
     @PostMapping("/transfer")
     ResponseEntity<SuccessResponse<Void>> transfer(@Valid @RequestBody TransactionRequest transactionRequest);
+
     @GetMapping("/account/{accountId}")
     ResponseEntity<SuccessResponse<List<TransactionDto>>> transactions(@NotBlank @PathVariable String accountId);
 }

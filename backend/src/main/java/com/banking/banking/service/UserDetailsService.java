@@ -2,7 +2,6 @@ package com.banking.banking.service;
 
 import com.banking.banking.enums.RoleType;
 import com.banking.banking.exceptions.custom.UserAlreadyExistException;
-import com.banking.banking.model.Authority;
 import com.banking.banking.model.User;
 import com.banking.banking.repositories.AuthorityRepository;
 import com.banking.banking.repositories.UserRepository;

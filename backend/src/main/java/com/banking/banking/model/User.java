@@ -1,8 +1,9 @@
 package com.banking.banking.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -53,7 +53,7 @@ public class User implements UserDetails, CredentialsContainer {
 
     @Override
     public void eraseCredentials() {
-       password = null;
+        password = null;
     }
 
     @Override

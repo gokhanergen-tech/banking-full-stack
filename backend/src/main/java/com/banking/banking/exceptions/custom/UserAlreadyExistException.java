@@ -1,3 +1,4 @@
 package com.banking.banking.exceptions.custom;
 
-public class UserAlreadyExistException extends RuntimeException{}
+public class UserAlreadyExistException extends RuntimeException {
+}

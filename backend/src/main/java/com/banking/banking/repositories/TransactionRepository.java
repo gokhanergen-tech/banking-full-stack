@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query(value = "select * from transactions where from_account_id=?1 or to_account_id=?1",nativeQuery = true)
+    @Query(value = "select * from transactions where from_account_id=?1 or to_account_id=?1", nativeQuery = true)
     List<Transaction> findByAccountId(UUID accountId);
 }

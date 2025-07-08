@@ -2,7 +2,6 @@ package com.banking.banking.config;
 
 import com.banking.banking.filters.JWTRequestFilter;
 import com.banking.banking.service.UserDetailsService;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +24,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
-
 @EnableWebSecurity
 @Configuration
 @Slf4j
@@ -47,23 +44,23 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
-                .csrf(csrf->{
+                .csrf(csrf -> {
                     csrf.disable();
                 })
                 .authorizeHttpRequests(matcher -> {
-                    matcher.requestMatchers("/users/login","/users/register").permitAll();
+                    matcher.requestMatchers("/users/login", "/users/register").permitAll();
 
-                    if (mode.equals("dev")){
+                    if (mode.equals("dev")) {
                         log.info("The backend service has been started in dev mode.");
                         matcher.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                         log.info("Swagger is active now.");
                     }
 
-                    matcher.requestMatchers(HttpMethod.GET,"/accounts/*").hasAuthority("MANAGER_ROLE");
+                    matcher.requestMatchers(HttpMethod.GET, "/accounts/*").hasAuthority("MANAGER_ROLE");
 
                     matcher.anyRequest().authenticated();
                 })
-                .sessionManagement(httpSecuritySessionManagementConfigurer ->httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
@@ -83,7 +80,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider getAuthenticationProvider(PasswordEncoder passwordEncoder,UserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider getAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);

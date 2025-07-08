@@ -9,6 +9,7 @@ import com.banking.banking.response.LoginResponse;
 import com.banking.banking.response.SuccessResponse;
 import com.banking.banking.service.AuthenticationService;
 import com.banking.banking.service.UserDetailsService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
-public class UserController implements UserControllerApi{
+public class UserController implements UserControllerApi {
     private final UserDetailsService userDetailsService;
     private final AuthenticationService authenticationService;
     private final UserMapper userMapper;
@@ -32,7 +33,7 @@ public class UserController implements UserControllerApi{
     public ResponseEntity<SuccessResponse<Void>> registerUser(RegisterRequest registerRequest) {
         User user = userMapper.toUserFromRegisterRequest(registerRequest);
         userDetailsService.createUser(user);
-        return ResponseEntity.ok(new SuccessResponse<>(null,"Registration successful", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new SuccessResponse<>(null, "Registration successful", HttpStatus.OK.value()));
     }
 
     @Override
@@ -44,6 +45,12 @@ public class UserController implements UserControllerApi{
 
     @Override
     public ResponseEntity<SuccessResponse<LoginResponse>> me() {
-        return ResponseEntity.ok(new SuccessResponse<>(authenticationService.me(),null,HttpStatus.OK.value()));
+        return ResponseEntity.ok(new SuccessResponse<>(authenticationService.me(), null, HttpStatus.OK.value()));
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponse<Void>> logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        authenticationService.logout(httpServletRequest, httpServletResponse);
+        return ResponseEntity.ok(new SuccessResponse<>(null, "Logout successful", HttpStatus.OK.value()));
     }
 }

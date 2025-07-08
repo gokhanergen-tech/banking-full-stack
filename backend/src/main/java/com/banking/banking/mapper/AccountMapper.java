@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -19,7 +20,7 @@ public interface AccountMapper {
         if (balance == null) {
             return null;
         }
-        return balance.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return balance.setScale(2, RoundingMode.HALF_UP);
     }
 
     List<AccountDto> accountListToDtoList(List<Account> accounts);

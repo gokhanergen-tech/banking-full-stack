@@ -31,21 +31,17 @@ import java.util.Optional;
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
-
-    private final JWTService jwtService;
-    private final UserDetailsService userDetailsService;
-    private final CookieService cookieService;
-
-    @Value("${jwt.security.secret_key_accessToken}")
-    private String accessSecretKey;
-
-    @Autowired
-    private HandlerExceptionResolver handlerExceptionResolver;
-
     private static final List<String> EXCLUDED_PATHS = List.of(
             "/api/v1/users/login",
             "/api/v1/users/register"
     );
+    private final JWTService jwtService;
+    private final UserDetailsService userDetailsService;
+    private final CookieService cookieService;
+    @Value("${jwt.security.secret_key_accessToken}")
+    private String accessSecretKey;
+    @Autowired
+    private HandlerExceptionResolver handlerExceptionResolver;
 
     public JWTRequestFilter(JWTService jwtService, UserDetailsService userDetailsService, CookieService cookieService) {
         this.jwtService = jwtService;
@@ -69,7 +65,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                 User user;
                 try {
                     user = (User) userDetailsService.loadUserByUsername(username);
-                }catch (UsernameNotFoundException usernameNotFoundException){
+                } catch (UsernameNotFoundException usernameNotFoundException) {
                     throw new AuthenticationSideException("Authentication error");
                 }
                 var tokenAuth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -78,7 +74,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             } else {
                 throw new AuthenticationSideException("Authentication error");
             }
-        }catch (AuthenticationException | JwtException authenticationException) {
+        } catch (AuthenticationException | JwtException authenticationException) {
             handleException(request, response, authenticationException);
             return;
         } catch (Exception exception) {

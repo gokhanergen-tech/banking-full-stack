@@ -21,12 +21,27 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_account_id", nullable = false)
+    @JoinColumn(
+            name = "from_account_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_transaction_from_account",
+                    foreignKeyDefinition = "FOREIGN KEY (from_account_id) REFERENCES accounts(id) ON DELETE SET NULL"
+            )
+    )
     private Account from;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_account_id", nullable = false)
+    @JoinColumn(
+            name = "to_account_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_transaction_to_account",
+                    foreignKeyDefinition = "FOREIGN KEY (to_account_id) REFERENCES accounts(id) ON DELETE SET NULL"
+            )
+    )
     private Account to;
+
     @Column(nullable = false)
     private BigDecimal amount;
     @Column(nullable = false)

@@ -3,7 +3,7 @@ import type {
   AccountCreateRequest,
   AccountDto,
   AccountSearchRequest,
-  TransferRequest
+  AccountUpdateRequest
 } from "./models/account";
 import API_PATHS from "./paths";
 
@@ -26,10 +26,8 @@ export class AccountService {
     return success.data;
   }
 
-  async transfer(transferRequest: TransferRequest): Promise<void> {
-    const result = await axiosInstance.post(API_PATHS.TRANSFER, transferRequest);
-    const success = result.data;
-    return success.data;
+  async update(id: string, accountCreateRequest: AccountUpdateRequest): Promise<void> {
+    await axiosInstance.put(API_PATHS.ACCOUNT_UPDATE_BY_ID(id), accountCreateRequest);
   }
 }
 

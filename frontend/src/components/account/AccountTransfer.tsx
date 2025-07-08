@@ -1,7 +1,7 @@
 // src/components/accounts/AccountTransfer.tsx
 import { Button, Form, Input, InputNumber, Space } from "antd";
 import { useContext, useState } from "react";
-import accountService from "../../api/AccountService"; // axios servislerin
+import transactionsService from "../../api/TransactionsService";
 import { MessageContext } from "../../App";
 
 interface TransferForm {
@@ -25,13 +25,19 @@ const AccountTransfer = ({ transfer }: { transfer: (account: TransferForm) => vo
         key: "loading_transfer"
       });
 
-      await accountService.transfer(values);
+      const transferObject: TransferForm = {
+        from: values.from?.trim(),
+        to: values.to?.trim(),
+        amount: values.amount
+      };
+
+      await transactionsService.transfer(transferObject);
 
       messageApi?.open({
         type: "success",
         content: "Transfer başarılı"
       });
-      transfer(values);
+      transfer(transferObject);
 
       form.resetFields();
     } catch (error: any) {

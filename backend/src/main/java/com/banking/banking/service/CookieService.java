@@ -23,7 +23,7 @@ public class CookieService {
         cookie.setHttpOnly(httpOnly);
         cookie.setMaxAge(maxAge);
         cookie.setPath("/");
-        cookie.setSecure(mode=="prod");
+        cookie.setSecure(mode == "prod");
 
         return cookie;
     }

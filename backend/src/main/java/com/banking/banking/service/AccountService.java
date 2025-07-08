@@ -8,6 +8,7 @@ import com.banking.banking.model.User;
 import com.banking.banking.repositories.AccountRepository;
 import com.banking.banking.request.AccountCreateRequest;
 import com.banking.banking.request.AccountSearchRequest;
+import com.banking.banking.request.AccountUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class AccountService {
     public AccountDto create(AccountCreateRequest accountRequest) {
         String accountName = accountRequest.getName();
         User authenticatedUser = getCurrentUserAs(User.class);
-        if(accountRepository.existsByNameAndUserId(accountName, authenticatedUser.getId())){
+        if (accountRepository.existsByNameAndUserId(accountName, authenticatedUser.getId())) {
             log.warn("Account creation failed: username '{}' is already taken.", accountName);
             throw new AccountAlreadyExistException("An account with the given details already exists.");
         }
@@ -56,12 +57,21 @@ public class AccountService {
         String number = Optional.ofNullable(searchRequest.getNumber()).orElse("");
         String name = Optional.ofNullable(searchRequest.getName()).orElse("");
 
-        List<Account> accounts = accountRepository.findByUserIdAndNumberContainingAndNameContaining(authenticatedUser.getId(),number, name);
+        List<Account> accounts = accountRepository.findByUserIdAndNumberContainingAndNameContaining(authenticatedUser.getId(), number, name);
 
         return accountMapper.accountListToDtoList(accounts);
     }
 
     public void delete(UUID id) {
         accountRepository.deleteByIdAndUserId(id, getCurrentUserAs(User.class).getId());
+    }
+
+    public void update(UUID id, AccountUpdateRequest accountUpdateRequest) {
+        UUID userId = getCurrentUserAs(User.class).getId();
+
+        Account account = accountRepository.findByIdAndUserId(id, userId);
+        account.setName(accountUpdateRequest.getName());
+
+        accountRepository.save(account);
     }
 }

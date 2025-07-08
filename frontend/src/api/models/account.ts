@@ -21,3 +21,7 @@ export interface AccountCreateRequest {
   balance: number;
   name: string;
 }
+
+export interface AccountUpdateRequest {
+  name: string;
+}

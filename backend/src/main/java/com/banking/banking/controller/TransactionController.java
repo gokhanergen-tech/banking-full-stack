@@ -1,6 +1,5 @@
 package com.banking.banking.controller;
 
-import com.banking.banking.dto.AccountDto;
 import com.banking.banking.dto.TransactionDto;
 import com.banking.banking.request.TransactionRequest;
 import com.banking.banking.response.SuccessResponse;
@@ -16,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/transactions")
 @Validated
-public class TransactionController implements TransactionControllerApi{
+public class TransactionController implements TransactionControllerApi {
     private final TransactionService transactionService;
 
     public TransactionController(TransactionService transactionService) {
@@ -26,14 +25,14 @@ public class TransactionController implements TransactionControllerApi{
     @Override
     public ResponseEntity<SuccessResponse<Void>> transfer(TransactionRequest transactionRequest) {
         transactionService.transfer(transactionRequest);
-        return ResponseEntity.ok(new SuccessResponse<>(null,"Transferred successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new SuccessResponse<>(null, "Transferred successfully", HttpStatus.OK.value()));
     }
 
     @Override
     public ResponseEntity<SuccessResponse<List<TransactionDto>>> transactions(String accountId) {
         List<TransactionDto> transactions = transactionService.transactionsByAccountId(accountId);
 
-        SuccessResponse<List<TransactionDto>> successResponse = new SuccessResponse<>(transactions,null,HttpStatus.OK.value());
+        SuccessResponse<List<TransactionDto>> successResponse = new SuccessResponse<>(transactions, null, HttpStatus.OK.value());
         return ResponseEntity.ok(successResponse);
     }
 

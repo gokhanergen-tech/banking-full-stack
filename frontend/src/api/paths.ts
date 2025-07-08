@@ -5,9 +5,11 @@ const API_PATHS = {
   ACCOUNTS: "/accounts",
   ME: "/users/me",
   TRANSFER: "/transactions/transfer",
+  LOGOUT: "/users/logout",
   TRANSACTIONS_BY_ACCOUNT_ID: (id: string) => `/transactions/account/${id}`,
   DELETE_ACCOUNT_BY_ID: (id: string) => `/accounts/${id}`,
-  ACCOUNT_BY_ID: (id: string) => `/accounts/${id}`
+  ACCOUNT_BY_ID: (id: string) => `/accounts/${id}`,
+  ACCOUNT_UPDATE_BY_ID: (id: string) => `/accounts/${id}`
 };
 
 export default API_PATHS;

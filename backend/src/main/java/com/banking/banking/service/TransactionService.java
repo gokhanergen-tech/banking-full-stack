@@ -69,7 +69,7 @@ public class TransactionService {
         UUID userID = SecurityUtil.getCurrentUserAs(User.class).getId();
         UUID accountUUID = UUID.fromString(accountId);
 
-        if(!accountRepository.existsByIdAndUserId(accountUUID, userID)){
+        if (!accountRepository.existsByIdAndUserId(accountUUID, userID)) {
             throw new TransactionsSecurityException("You are not authorized to access transactions for this account.");
         }
 

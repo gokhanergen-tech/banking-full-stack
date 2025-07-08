@@ -1,6 +1,5 @@
 package com.banking.banking.repositories;
 
-import com.banking.banking.dto.AccountDto;
 import com.banking.banking.model.Account;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +13,9 @@ import java.util.UUID;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, UUID> {
     boolean existsByNameAndUserId(String accountName, UUID id);
+
     List<Account> findByUserIdAndNumberContainingAndNameContaining(UUID id, String number, String name);
+
     void deleteByIdAndUserId(UUID id, UUID userId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
@@ -24,4 +25,6 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
     Optional<Account> findByNumberAndUserId(String from, UUID id);
 
     boolean existsByIdAndUserId(UUID accountId, UUID userID);
+
+    Account findByIdAndUserId(UUID id, UUID userId);
 }

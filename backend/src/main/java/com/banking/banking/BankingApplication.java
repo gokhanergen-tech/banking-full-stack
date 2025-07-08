@@ -17,21 +17,21 @@ import java.util.List;
 @EnableJpaRepositories
 public class BankingApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BankingApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BankingApplication.class, args);
+    }
 
-	@Bean
-	CommandLineRunner initRoles(AuthorityRepository authorityRepository) {
-		return args -> {
-			List<RoleType> roles = List.of(RoleType.MANAGER_ROLE, RoleType.USER_ROLE);
+    @Bean
+    CommandLineRunner initRoles(AuthorityRepository authorityRepository) {
+        return args -> {
+            List<RoleType> roles = List.of(RoleType.MANAGER_ROLE, RoleType.USER_ROLE);
 
-			for (RoleType role : roles) {
-				if (!authorityRepository.existsByAuthority(role)) {
-					authorityRepository.save(new Authority(role));
-				}
-			}
-		};
-	}
+            for (RoleType role : roles) {
+                if (!authorityRepository.existsByAuthority(role)) {
+                    authorityRepository.save(new Authority(role));
+                }
+            }
+        };
+    }
 
 }

@@ -3,6 +3,7 @@ package com.banking.banking.controller;
 import com.banking.banking.dto.AccountDto;
 import com.banking.banking.request.AccountCreateRequest;
 import com.banking.banking.request.AccountSearchRequest;
+import com.banking.banking.request.AccountUpdateRequest;
 import com.banking.banking.response.SuccessResponse;
 import com.banking.banking.service.AccountService;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/accounts")
 @Validated
-public class AccountController implements AccountControllerApi{
+public class AccountController implements AccountControllerApi {
     private final AccountService accountService;
 
     public AccountController(AccountService accountService) {
@@ -26,17 +27,23 @@ public class AccountController implements AccountControllerApi{
 
     @Override
     public ResponseEntity<SuccessResponse<AccountDto>> createAccount(AccountCreateRequest accountRequest) {
-        return ResponseEntity.ok().body(new SuccessResponse<>(accountService.create(accountRequest),"Account created successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok().body(new SuccessResponse<>(accountService.create(accountRequest), "Account created successfully", HttpStatus.OK.value()));
     }
 
     @Override
     public ResponseEntity<SuccessResponse<List<AccountDto>>> searchAccounts(AccountSearchRequest searchRequest) {
-        return ResponseEntity.ok(new SuccessResponse<>(accountService.searchAccounts(searchRequest),null, HttpStatus.OK.value()));
+        return ResponseEntity.ok(new SuccessResponse<>(accountService.searchAccounts(searchRequest), null, HttpStatus.OK.value()));
     }
 
     @Override
     public ResponseEntity<SuccessResponse<Void>> deleteAccount(UUID id) {
         accountService.delete(id);
-        return ResponseEntity.ok(new SuccessResponse<>(null,"Deleted account successfully", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new SuccessResponse<>(null, "Account deleted successfully", HttpStatus.OK.value()));
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponse<Void>> updateAccount(UUID id, AccountUpdateRequest accountUpdateRequest) {
+        accountService.update(id, accountUpdateRequest);
+        return ResponseEntity.ok(new SuccessResponse<>(null, "Account updated successfully", HttpStatus.OK.value()));
     }
 }

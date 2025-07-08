@@ -2,7 +2,8 @@ import { BankOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, Menu } from "antd";
 import React, { useContext } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../App";
+import userService from "../api/UserService";
+import { AuthContext, MessageContext } from "../App";
 import styles from "./DashboardLayout.module.scss";
 
 const { Header, Content, Sider } = Layout;
@@ -10,8 +11,34 @@ const { Header, Content, Sider } = Layout;
 const DashboardLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const messageApi = useContext(MessageContext);
 
   const authValue = useContext(AuthContext);
+
+  const logout = async () => {
+    try {
+      messageApi?.open({
+        type: "loading",
+        content: "Çıkış yapılıyor...",
+        duration: 0,
+        key: "loading_logout"
+      });
+
+      await userService.logout();
+      authValue?.updateAuthInfo(undefined);
+      messageApi?.open({
+        type: "success",
+        content: "Başarılı bir şekilde çıkış yapıldı"
+      });
+    } catch (err) {
+      messageApi?.open({
+        type: "error",
+        content: "Çıkış başarısız oldu"
+      });
+    } finally {
+      messageApi?.destroy("loading_logout");
+    }
+  };
 
   return (
     <Layout className={styles.layout}>
@@ -36,7 +63,7 @@ const DashboardLayout: React.FC = () => {
             <Dropdown
               overlay={
                 <Menu>
-                  <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => {}}>
+                  <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={logout}>
                     Çıkış Yap
                   </Menu.Item>
                 </Menu>

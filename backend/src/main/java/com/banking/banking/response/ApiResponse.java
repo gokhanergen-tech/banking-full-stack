@@ -1,8 +1,6 @@
 package com.banking.banking.response;
 
 
-import com.banking.banking.response.ErrorResponse;
-import com.banking.banking.response.SuccessResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +10,8 @@ public class ApiResponse {
     private int status;
     private String message;
 
-    public ApiResponse() {}
+    public ApiResponse() {
+    }
 
     public ApiResponse(int status, String message) {
         this.status = status;

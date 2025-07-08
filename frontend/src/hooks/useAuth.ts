@@ -20,9 +20,6 @@ const useAuth = (updateAuthInfo: React.Dispatch<React.SetStateAction<AuthInfo | 
     })();
   }, []);
   return {
-    logout: () => {
-      navigate("/login");
-    },
     isLoadingAuth
   };
 };
