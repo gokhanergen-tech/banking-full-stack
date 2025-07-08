@@ -45,7 +45,7 @@ const DashboardLayout: React.FC = () => {
       <Sider>
         <div className={styles.logo}>
           <BankOutlined style={{ fontSize: 24, color: "white" }} />
-          <span style={{ color: "white", marginLeft: 8 }}>MyBank</span>
+          <span style={{ color: "white", marginLeft: 8 }}>Bankam</span>
         </div>
 
         <Menu
