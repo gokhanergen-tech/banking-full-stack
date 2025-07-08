@@ -1,28 +1,32 @@
 package com.banking.banking.controller;
 
 import com.banking.banking.dto.AccountDto;
-import com.banking.banking.request.AccountRequest;
+import com.banking.banking.request.AccountCreateRequest;
+import com.banking.banking.request.AccountSearchRequest;
 import com.banking.banking.response.SuccessResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 public interface AccountControllerApi {
 
     @PostMapping
-    ResponseEntity<SuccessResponse<AccountDto>> createAccount(@Valid @RequestBody AccountRequest accountRequest);
+    ResponseEntity<SuccessResponse<AccountDto>> createAccount(@Valid @RequestBody AccountCreateRequest accountRequest);
 
-    /*@PostMapping(value = "/api/accounts")
-    ResponseEntity<List<AccountResponse>> searchAccounts(@RequestBody AccountSearchRequest searchRequest);
+    @GetMapping
+    ResponseEntity<SuccessResponse<List<AccountDto>>> searchAccounts(@Valid @ModelAttribute AccountSearchRequest searchRequest);
 
+    @DeleteMapping("/{id}")
+    ResponseEntity<SuccessResponse<Void>> deleteAccount(@NotNull @PathVariable("id") UUID id);
+
+    /*
     @PutMapping("/api/accounts/{id}")
     ResponseEntity<?> updateAccount(@PathVariable("id") Long id, @RequestBody AccountRequest accountRequest);
 
-    // 4. Delete Account
-    @DeleteMapping("/api/accounts/{id}")
-    ResponseEntity<?> deleteAccount(@PathVariable("id") Long id);
+
 
     // 5. View Account Details
     @GetMapping("/api/accounts/{id}")

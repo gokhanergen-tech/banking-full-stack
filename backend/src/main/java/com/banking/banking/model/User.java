@@ -1,5 +1,6 @@
 package com.banking.banking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -43,8 +44,7 @@ public class User implements UserDetails, CredentialsContainer {
     private String salt;
     @Version
     private Long version = 0L;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> accounts;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "user_authorities"
             , joinColumns = @JoinColumn(name = "user_id", foreignKey = @ForeignKey(foreignKeyDefinition = "foreign key(user_id) references users(id) on delete cascade"))

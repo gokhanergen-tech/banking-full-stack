@@ -38,6 +38,6 @@ public class Account {
     @JoinColumn(
             name = "user_id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk_account_user", value = ConstraintMode.CONSTRAINT))
+            foreignKey = @ForeignKey(foreignKeyDefinition = "foreign key(user_id) references users(id) on delete cascade"))
     private User user;
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -58,8 +59,9 @@ public class WebSecurityConfig {
                         log.info("Swagger is active now.");
                     }
 
-                    matcher.requestMatchers("/users/me").hasAuthority("USER")
-                            .anyRequest().authenticated();
+                    matcher.requestMatchers(HttpMethod.GET,"/accounts/*").hasAuthority("MANAGER_ROLE");
+
+                    matcher.anyRequest().authenticated();
                 })
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)

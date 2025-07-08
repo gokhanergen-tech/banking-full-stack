@@ -5,6 +5,7 @@ import com.banking.banking.mapper.UserMapper;
 import com.banking.banking.model.User;
 import com.banking.banking.request.LoginRequest;
 import com.banking.banking.response.LoginResponse;
+import com.banking.banking.utils.SecurityUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,6 +51,14 @@ public class AuthenticationService {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUserDto(userDto);
 
-        return null;
+        return loginResponse;
     };
+
+    public LoginResponse me() {
+        User user = SecurityUtil.getCurrentUserAs(User.class);
+        UserDto userDto = userMapper.userToDto(user);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setUserDto(userDto);
+        return loginResponse;
+    }
 }

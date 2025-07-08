@@ -41,4 +41,9 @@ public class UserController implements UserControllerApi{
 
         return ResponseEntity.ok(new SuccessResponse<>(loginResponse, "Login successful", HttpStatus.OK.value()));
     }
+
+    @Override
+    public ResponseEntity<SuccessResponse<LoginResponse>> me() {
+        return ResponseEntity.ok(new SuccessResponse<>(authenticationService.me(),null,HttpStatus.OK.value()));
+    }
 }

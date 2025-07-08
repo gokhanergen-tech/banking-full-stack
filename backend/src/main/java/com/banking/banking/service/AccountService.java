@@ -2,16 +2,18 @@ package com.banking.banking.service;
 
 import com.banking.banking.dto.AccountDto;
 import com.banking.banking.exceptions.custom.AccountAlreadyExistException;
-import com.banking.banking.exceptions.custom.UserAlreadyExistException;
 import com.banking.banking.mapper.AccountMapper;
 import com.banking.banking.model.Account;
 import com.banking.banking.model.User;
 import com.banking.banking.repositories.AccountRepository;
-import com.banking.banking.request.AccountRequest;
+import com.banking.banking.request.AccountCreateRequest;
+import com.banking.banking.request.AccountSearchRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.banking.banking.utils.SecurityUtil.getCurrentUserAs;
@@ -19,6 +21,7 @@ import static com.banking.banking.utils.SecurityUtil.getCurrentUserAs;
 
 @Service
 @Slf4j
+@Transactional(rollbackFor = {Exception.class})
 public class AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
@@ -28,8 +31,7 @@ public class AccountService {
         this.accountMapper = accountMapper;
     }
 
-    @Transactional(rollbackFor = {Exception.class})
-    public AccountDto create(AccountRequest accountRequest) {
+    public AccountDto create(AccountCreateRequest accountRequest) {
         String accountName = accountRequest.getName();
         User authenticatedUser = getCurrentUserAs(User.class);
         if(accountRepository.existsByNameAndUserId(accountName, authenticatedUser.getId())){
@@ -45,5 +47,20 @@ public class AccountService {
 
         accountRepository.save(account);
         return accountMapper.accountToDto(account);
+    }
+
+    public List<AccountDto> searchAccounts(AccountSearchRequest searchRequest) {
+        User authenticatedUser = getCurrentUserAs(User.class);
+
+        String number = Optional.ofNullable(searchRequest.getNumber()).orElse("");
+        String name = Optional.ofNullable(searchRequest.getName()).orElse("");
+
+        List<Account> accounts = accountRepository.findByUserIdAndNumberContainingAndNameContaining(authenticatedUser.getId(),number, name);
+
+        return accountMapper.accountListToDtoList(accounts);
+    }
+
+    public void delete(UUID id) {
+        accountRepository.deleteByIdAndUserId(id, getCurrentUserAs(User.class).getId());
     }
 }

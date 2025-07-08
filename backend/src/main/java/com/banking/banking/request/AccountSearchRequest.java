@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountRequest {
-    @NotBlank(message = "Account name cannot be blank")
+public class AccountSearchRequest {
     private String name;
+    private String number;
 }

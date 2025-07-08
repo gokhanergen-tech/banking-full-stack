@@ -8,6 +8,7 @@ import com.banking.banking.response.SuccessResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,4 +19,7 @@ public interface UserControllerApi {
 
     @PostMapping("/login")
     ResponseEntity<SuccessResponse<LoginResponse>> loginUser(@Valid @RequestBody LoginRequest loginRequest,HttpServletResponse httpServletResponse);
+
+    @GetMapping("/me")
+    ResponseEntity<SuccessResponse<LoginResponse>> me();
 }

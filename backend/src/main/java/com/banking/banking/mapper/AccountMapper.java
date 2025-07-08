@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
@@ -20,4 +21,6 @@ public interface AccountMapper {
         }
         return balance.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
+
+    List<AccountDto> accountListToDtoList(List<Account> accounts);
 }

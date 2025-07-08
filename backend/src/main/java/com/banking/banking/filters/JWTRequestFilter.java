@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -65,8 +66,12 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
                 String accessTokenGet = accessToken.getValue();
                 String username = jwtService.extractMail(accessSecretKey, accessTokenGet);
-
-                User user = (User) userDetailsService.loadUserByUsername(username);
+                User user;
+                try {
+                    user = (User) userDetailsService.loadUserByUsername(username);
+                }catch (UsernameNotFoundException usernameNotFoundException){
+                    throw new AuthenticationSideException("Authentication error");
+                }
                 var tokenAuth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 tokenAuth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(tokenAuth);
@@ -88,7 +93,10 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         return pathMatcher.match("/api/v1/users/login", path)
-                || pathMatcher.match("/api/v1/users/register", path);
+                || pathMatcher.match("/api/v1/users/register", path)
+                || path.startsWith("/api/v1/v3/api-docs")
+                || path.startsWith("/api/v1/swagger-ui")
+                || path.startsWith("/api/v1/swagger-resources");
     }
 
     private void handleException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Exception exception) {
